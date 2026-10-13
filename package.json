@@ -12,6 +12,9 @@
     "url": "git+https://github.com/maciekt07/TodoApp.git"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",
