@@ -57,6 +57,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
     "@types/dom-chromium-ai": "^0.0.9",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
@@ -64,11 +68,13 @@
     "@typescript-eslint/parser": "^8.30.1",
     "@vitejs/plugin-basic-ssl": "^2.0.0",
     "@vitejs/plugin-react": "^4.4.0",
+    "csstype": "^3.2.3",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
     "puppeteer": "^24.6.1",
@@ -78,7 +84,8 @@
     "vite": "^6.3.2",
     "vite-plugin-pwa": "^1.0.0",
     "vite-plugin-qrcode": "^0.2.4",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.1",
+    "workbox-window": "^7.4.1"
   },
   "sideEffects": [
     "**/*.styled.tsx"

@@ -1,0 +1,62 @@
+# openspec/config.yaml
+schema: spec-driven
+artifact_store: hybrid
+strict_tdd: true
+
+context: |
+  Tech stack: React 19 + TypeScript 5.8 + Vite 6 PWA (vite-plugin-pwa), MUI 7 + Emotion, react-router-dom 7, dnd-kit, peerjs, lz-string. ESM, Netlify.
+  Architecture: technical-layer under src/ (components, pages, contexts, hooks, layouts, services, utils, theme, types). Local-first, no backend.
+  Principles: local-first, privacy (data leaves device only by explicit share/sync), offline PWA, P2P over server, Gemini Nano optional, a11y + reduced motion.
+  Testing: Vitest 3 (globals, include src/**/*.test.ts only; no jsdom/testing-library). Unit only; no E2E, coverage, or CI.
+  Style: conventional commits; ESLint 9 + Prettier via husky pre-commit (lint-staged).
+
+projects:
+  - path: .
+    stack: React 19 + TypeScript + Vite 6 PWA
+    test_command: npx vitest run
+    framework: Vitest 3
+    layers:
+      unit: true
+      integration: false
+      e2e: false
+    coverage: false
+    linter: npm run lint
+    type_checker: npm run test:typecheck
+    formatter: npm run format
+
+testing:
+  strict_tdd: true
+  test_command: npx vitest run
+  typecheck_command: npm run test:typecheck
+  lint_command: npm run lint
+  format_command: npm run format
+  build_command: npm run build
+  notes:
+    - "`npm test` runs vitest in watch mode; use `npx vitest run` for one-shot runs."
+    - "Vitest collects only src/**/*.test.ts; UI/hook tests need jsdom + @testing-library first."
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Align with project principles (local-first, privacy, offline, progressive enhancement)
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow existing code patterns
+      - Conventional commits, no AI attribution
+    tdd: true
+    test_command: npx vitest run
+  verify:
+    test_command: npx vitest run
+    build_command: npm run build
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas

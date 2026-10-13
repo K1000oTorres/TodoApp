@@ -1,4 +1,4 @@
-/// <reference types="vitest" />
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
@@ -27,7 +27,9 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    include: ["src/**/*.test.ts"],
+    environment: "jsdom",
+    setupFiles: ["./src/test/setup.ts"],
+    include: ["src/**/*.test.{ts,tsx}"],
   },
   plugins: [
     react({
