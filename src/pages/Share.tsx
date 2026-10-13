@@ -11,7 +11,8 @@ import { CustomDialogTitle } from "../components";
 import { TaskItem } from "../components/tasks/TaskItem";
 import Home from "./Home";
 import LZString from "lz-string";
-//FIXME: make everything type-safe
+import { parseSharedTask } from "../utils/sharedTask";
+
 const SharePage = () => {
   const { user, setUser } = useContext(UserContext);
   const n = useNavigate();
@@ -31,7 +32,14 @@ const SharePage = () => {
 
   useEffect(() => {
     const handleTaskData = (decodedTask: string) => {
-      const task: Task = { ...(JSON.parse(decodedTask) as Task), id: generateUUID() };
+      const sharedTask = parseSharedTask(JSON.parse(decodedTask));
+      if (!sharedTask) {
+        setError(true);
+        setErrorDetails("Invalid task data.");
+        return;
+      }
+
+      const task: Task = { ...sharedTask, id: generateUUID() };
 
       if (
         !isHexColor(task.color) ||
