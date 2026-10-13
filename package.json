@@ -96,6 +96,10 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,mjs,md,json,html,css}": "npm run format"
+    "**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{js,mjs,md,json,html,css}": "prettier --write"
   }
 }
