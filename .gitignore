@@ -28,3 +28,6 @@ dev-dist
 
 # Vite cache
 /.cache
+
+# Test coverage reports
+coverage
