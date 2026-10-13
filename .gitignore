@@ -28,3 +28,9 @@ dev-dist
 
 # Vite cache
 /.cache
+
+# Test coverage reports
+/coverage
+
+# Local agent skill registry (gentle-ai)
+/.atl
