@@ -59,6 +59,29 @@ describe("ShareDialog", () => {
     expect(decodePayload(link).userName).toBe("Ada Lovelace");
   });
 
+  describe("when the current URL is not the bare home URL", () => {
+    afterEach(() => {
+      window.history.pushState({}, "", "/");
+    });
+
+    it.each([
+      ["a query string", "/?utm_source=test"],
+      ["a hash", "/#anything"],
+    ])("builds the link from the origin when the URL has %s", (_, currentUrl) => {
+      window.history.pushState({}, "", currentUrl);
+      renderDialog({ initialUser: { name: "Ada" } });
+
+      const url = new URL(getLink());
+      expect(url.origin).toBe(window.location.origin);
+      expect(url.pathname).toBe("/share");
+      expect(url.hash).toBe("");
+      expect(decodePayload(url.href)).toEqual({
+        payload: expect.objectContaining({ name: "Write report" }),
+        userName: "Ada",
+      });
+    });
+  });
+
   it("falls back to 'User' when the sender has no name", () => {
     renderDialog({ initialUser: { name: null } });
 
