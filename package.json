@@ -15,6 +15,7 @@
   "engines": {
     "node": ">=22.13.0"
   },
+  "packageManager": "pnpm@11.1.2",
   "scripts": {
     "dev": "vite",
     "dev:host": "vite --host",
@@ -23,8 +24,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --write \"**/*.{ts,js,mjs,tsx,md,json,html,css}\"",
-    "format": "npm run lint:fix && npm run prettier",
-    "generate-splash": "npm run generate-splash:cleanup && node scripts/splash-screens/generate.mjs && prettier --write index.html",
+    "format": "pnpm run lint:fix && pnpm run prettier",
+    "generate-splash": "pnpm run generate-splash:cleanup && node scripts/splash-screens/generate.mjs && prettier --write index.html",
     "generate-splash:cleanup": "node scripts/splash-screens/generate.mjs --mode=cleanup && prettier --write index.html",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -33,7 +34,7 @@
     "rm:build": "rimraf dist dev-dist",
     "rm:cache": "rimraf .cache dev-dist",
     "rm:node_modules": "rimraf node_modules",
-    "clean-install": "npm run rm:node_modules && npm install && npm run rm:cache"
+    "clean-install": "pnpm run rm:node_modules && pnpm install && pnpm run rm:cache"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -93,11 +94,6 @@
   "sideEffects": [
     "**/*.styled.tsx"
   ],
-  "overrides": {
-    "react-spring-bottom-sheet": {
-      "react": "19.0.0"
-    }
-  },
   "lint-staged": {
     "**/*.{ts,tsx}": [
       "eslint --fix",

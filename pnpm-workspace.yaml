@@ -1,0 +1,5 @@
+allowBuilds:
+  esbuild: true
+  puppeteer: false
+overrides:
+  "react-spring-bottom-sheet>react": "19.0.0"

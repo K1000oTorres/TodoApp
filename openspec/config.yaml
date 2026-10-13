@@ -13,26 +13,26 @@ context: |
 projects:
   - path: .
     stack: React 19 + TypeScript + Vite 6 PWA
-    test_command: npx vitest run
+    test_command: pnpm exec vitest run
     framework: Vitest 3
     layers:
       unit: true
       integration: false
       e2e: false
     coverage: false
-    linter: npm run lint
-    type_checker: npm run test:typecheck
-    formatter: npm run format
+    linter: pnpm run lint
+    type_checker: pnpm run test:typecheck
+    formatter: pnpm run format
 
 testing:
   strict_tdd: true
-  test_command: npx vitest run
-  typecheck_command: npm run test:typecheck
-  lint_command: npm run lint
-  format_command: npm run format
-  build_command: npm run build
+  test_command: pnpm exec vitest run
+  typecheck_command: pnpm run test:typecheck
+  lint_command: pnpm run lint
+  format_command: pnpm run format
+  build_command: pnpm run build
   notes:
-    - "`npm test` runs vitest in watch mode; use `npx vitest run` for one-shot runs."
+    - "`pnpm test` runs vitest in watch mode; use `pnpm exec vitest run` for one-shot runs."
     - "Vitest collects only src/**/*.test.ts; UI/hook tests need jsdom + @testing-library first."
 
 rules:
@@ -53,10 +53,10 @@ rules:
       - Follow existing code patterns
       - Conventional commits, no AI attribution
     tdd: true
-    test_command: npx vitest run
+    test_command: pnpm exec vitest run
   verify:
-    test_command: npx vitest run
-    build_command: npm run build
+    test_command: pnpm exec vitest run
+    build_command: pnpm run build
     coverage_threshold: 0
   archive:
     - Warn before merging destructive deltas
