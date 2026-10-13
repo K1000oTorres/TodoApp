@@ -1,0 +1,57 @@
+name: Chore / Tooling
+description: Maintenance, build, dependency, CI or tooling work with no user-facing behavior change.
+title: "chore: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for technical work that does not change what users see (dependencies, build, CI, configuration, tooling).
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What needs to be done, in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Why this is needed now. Include the current problem or risk.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Dependencies / package manager
+        - Build / deploy
+        - Testing tooling
+        - CI
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Verifiable conditions that mean this is done.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: Out of scope
+      description: What this issue explicitly does not cover.
+    validations:
+      required: false
+  - type: input
+    id: related
+    attributes:
+      label: Related
+      description: Links to related issues, PRs or specs (e.g. openspec/specs/...).
+    validations:
+      required: false

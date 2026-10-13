@@ -1,0 +1,63 @@
+name: Test coverage
+description: Add or improve automated tests for an existing feature or for the test infrastructure.
+title: "test: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request tests for behavior that already exists. Tests run with Vitest + jsdom; see `openspec/specs/test-environment/spec.md`.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area under test
+      options:
+        - Share by link / QR
+        - P2P sync
+        - Tasks
+        - Categories
+        - User profile / settings
+        - Test infrastructure
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Behavior to cover
+      description: The user-visible or module behavior the tests must prove.
+    validations:
+      required: true
+  - type: dropdown
+    id: layers
+    attributes:
+      label: Test layers
+      multiple: true
+      options:
+        - Unit
+        - Hook
+        - Component / integration (renderWithProviders)
+    validations:
+      required: true
+  - type: textarea
+    id: mocks
+    attributes:
+      label: Mocks or stubs needed
+      description: Browser APIs or modules to mock (e.g. peerjs, navigator.clipboard, camera, matchMedia).
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Verifiable conditions that mean this is done.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: input
+    id: related
+    attributes:
+      label: Related
+      description: Links to related issues, PRs or specs.
+    validations:
+      required: false
