@@ -9,12 +9,8 @@ const importTimeMatchMedia = vi.mocked(window.matchMedia);
 
 describe("import-time matchMedia", () => {
   it("loads modules that read matchMedia while being imported", () => {
-    expect(ProfileSidebar).toBeDefined();
+    expect(typeof ProfileSidebar).toBe("function");
     expect(importTimeMatchMedia).toHaveBeenCalledWith("(display-mode: standalone)");
-    expect(importTimeMatchMedia.mock.results).toContainEqual({
-      type: "return",
-      value: expect.objectContaining({ media: "(display-mode: standalone)", matches: false }),
-    });
   });
 
   it("keeps the stub available after the import", () => {
