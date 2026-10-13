@@ -52,10 +52,6 @@ const renderShare = (route: string) =>
 const dialog = () => screen.findByRole("dialog");
 
 describe("SharePage", () => {
-  beforeEach(() => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-  });
-
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -83,7 +79,7 @@ describe("SharePage", () => {
 
     await user.click(await within(await dialog()).findByRole("button", { name: /add task/i }));
 
-    await waitFor(() => expect(screen.getByTestId("path")).toHaveTextContent("/"));
+    await waitFor(() => expect(screen.getByTestId("path").textContent).toBe("/"));
     expect(screen.getByTestId("task-names")).toHaveTextContent("Buy groceries");
     expect(screen.getByTestId("task-sender")).toHaveTextContent("Ada");
   });
@@ -119,6 +115,13 @@ describe("SharePage", () => {
   });
 
   describe("invalid links", () => {
+    beforeEach(() => {
+      vi.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    const expectDecodeErrorLogged = () =>
+      expect(console.error).toHaveBeenCalledWith("Error decoding task data:", expect.anything());
+
     const expectError = async (details: RegExp | string) => {
       const view = within(await dialog());
       expect(await view.findByText("Failed to recieve Task")).toBeInTheDocument();
@@ -136,18 +139,21 @@ describe("SharePage", () => {
       renderShare(shareRoute("not-a-valid-payload!!"));
 
       await expectError(/Failed to decode task data/);
+      expectDecodeErrorLogged();
     });
 
     it("reports a payload that decompresses to invalid JSON", async () => {
       renderShare(shareRoute(LZString.compressToEncodedURIComponent("not json")));
 
       await expectError(/Failed to decode task data/);
+      expectDecodeErrorLogged();
     });
 
     it("reports malformed legacy JSON", async () => {
       renderShare(shareRoute("{broken"));
 
       await expectError(/Failed to decode task data/);
+      expectDecodeErrorLogged();
     });
 
     it("rejects a task with an invalid color", async () => {

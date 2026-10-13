@@ -1,5 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import LZString from "lz-string";
+import toast, { Toaster } from "react-hot-toast";
 import { defaultUser } from "../../../constants/defaultUser";
 import { renderWithProviders } from "../../../test/renderWithProviders";
 import type { Category, Task } from "../../../types/user";
@@ -27,7 +28,13 @@ const task: Task = {
 };
 
 const renderDialog = (options: Parameters<typeof renderWithProviders>[1] = {}) =>
-  renderWithProviders(<ShareDialog open onClose={vi.fn()} selectedTask={task} />, options);
+  renderWithProviders(
+    <>
+      <ShareDialog open onClose={vi.fn()} selectedTask={task} />
+      <Toaster />
+    </>,
+    options,
+  );
 
 const getLink = () => (screen.getByLabelText("Shareable Link") as HTMLInputElement).value;
 
@@ -41,6 +48,7 @@ describe("ShareDialog", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     Reflect.deleteProperty(navigator, "share");
+    toast.remove();
   });
 
   it("shows a share link with the compressed task and the sender name", () => {
@@ -94,14 +102,15 @@ describe("ShareDialog", () => {
     });
   });
 
-  it("reports an error and does not crash when the clipboard rejects", async () => {
+  it("shows an error toast and does not crash when the clipboard rejects", async () => {
     const { user } = renderDialog();
     vi.spyOn(console, "error").mockImplementation(() => {});
     vi.spyOn(navigator.clipboard, "writeText").mockRejectedValue(new Error("denied"));
 
     await user.click(screen.getByRole("button", { name: /copy/i }));
 
-    await waitFor(() => expect(console.error).toHaveBeenCalled());
+    expect(await screen.findByText("Error copying link to clipboard")).toBeInTheDocument();
+    expect(console.error).toHaveBeenCalled();
     expect(screen.getByLabelText("Shareable Link")).toBeInTheDocument();
   });
 
