@@ -1,0 +1,74 @@
+name: Bug report
+description: Something in the app behaves differently from what it should.
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for user-facing behavior that is broken. For tooling or build problems, use the Chore / Tooling form.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is wrong, in one or two sentences.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Share by link / QR
+        - P2P sync
+        - Tasks
+        - Categories
+        - User profile / settings
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include error messages or console output if there are any.
+    validations:
+      required: true
+  - type: textarea
+    id: cause
+    attributes:
+      label: Suspected cause
+      description: File and line, if known.
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Verifiable conditions that mean this is fixed.
+      placeholder: |
+        - [ ] ...
+    validations:
+      required: true
+  - type: input
+    id: related
+    attributes:
+      label: Related
+      description: Links to related issues or PRs.
+    validations:
+      required: false
