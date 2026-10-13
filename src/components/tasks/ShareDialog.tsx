@@ -68,9 +68,12 @@ export const ShareDialog = ({ open, onClose, selectedTask }: ShareDialogProps) =
 
       // Compress the task JSON
       const compressedTask = LZString.compressToEncodedURIComponent(JSON.stringify(taskToShare));
-      const encodedUserName = encodeURIComponent(userName);
 
-      return `${window.location.href}share?task=${compressedTask}&userName=${encodedUserName}`;
+      // build from the origin so the current query string or hash never leaks into the link
+      const link = new URL("share", window.location.origin + import.meta.env.BASE_URL);
+      link.searchParams.set("task", compressedTask);
+      link.searchParams.set("userName", userName);
+      return link.toString();
     }
     return "";
   };
