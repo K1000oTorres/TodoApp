@@ -96,8 +96,9 @@ export function usePeerSync() {
   const { updateCategory } = useContext(TaskContext);
   const [mode, setMode] = useState<SyncMode | null>(null);
   const [hostPeerId, setHostPeerId] = useState<string>("");
-  const [peer, setPeer] = useState<Peer | null>(null);
-  const [conn, setConn] = useState<DataConnection | null>(null);
+  // refs instead of state so cleanup handlers always see the live instances
+  const peerRef = useRef<Peer | null>(null);
+  const connRef = useRef<DataConnection | null>(null);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({ message: "", severity: "info" });
 
   const [otherDataSyncOption, setOtherDataSyncOption] =
@@ -116,20 +117,19 @@ export function usePeerSync() {
 
   // reset all sync related state
   const resetAll = useCallback(() => {
-    if (conn) conn.close();
-    if (peer) peer.destroy();
-    setConn(null);
-    setPeer(null);
+    connRef.current?.close();
+    peerRef.current?.destroy();
+    connRef.current = null;
+    peerRef.current = null;
     setHostPeerId("");
     setStatus("", "info");
     setMode(null);
     setOtherDataSyncOption("this_device");
     setOtherDataSource(null);
     toast.dismiss();
-  }, [conn, peer, setStatus]);
+  }, [setStatus]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => () => resetAll(), []);
+  useEffect(() => resetAll, [resetAll]);
 
   // shared handler for incoming data
   const handleIncomingData = useCallback(
@@ -208,13 +208,13 @@ export function usePeerSync() {
   const startHost = useCallback(() => {
     setStatus(STATUS.startingPeer.message, STATUS.startingPeer.severity);
     const p = new Peer();
-    setPeer(p);
+    peerRef.current = p;
     p.on("open", (id) => {
       setHostPeerId(id);
       setStatus(STATUS.waitingForDevice.message, STATUS.waitingForDevice.severity);
     });
     p.on("connection", (connection) => {
-      setConn(connection);
+      connRef.current = connection;
       setStatus(STATUS.deviceConnected.message, STATUS.deviceConnected.severity);
       connection.on("data", (rawData) => {
         handleIncomingData(rawData as string, otherDataSyncOptionRef.current, (data) => {
@@ -239,12 +239,12 @@ export function usePeerSync() {
     (hostId: string) => {
       setStatus(STATUS.startingPeer.message, STATUS.startingPeer.severity);
       const p = new Peer();
-      setPeer(p);
+      peerRef.current = p;
       p.on("open", () => {
         setStatus(STATUS.connectingToHost.message, STATUS.connectingToHost.severity);
         const connection = p.connect(hostId);
         connection.on("open", async () => {
-          setConn(connection);
+          connRef.current = connection;
           setStatus(STATUS.connectedSending.message, STATUS.connectedSending.severity);
           const otherData = await extractOtherData(user);
           const syncData = prepareSyncData(

@@ -300,12 +300,12 @@ export function mergeSyncData(
     (cat) => !mergedDeletedCategories.includes(cat.id),
   );
 
-  // merge favorite categories
+  // merge favorite categories, ignoring remote categories that were deleted on either device
   const finalFavoriteCategories = mergeFavoriteCategories(
     localFavoriteCategories,
     syncData.favoriteCategories || [],
     finalCategories,
-    syncData.categories,
+    syncData.categories.filter((cat) => !mergedDeletedCategories.includes(cat.id)),
   );
 
   // merge/select otherData
