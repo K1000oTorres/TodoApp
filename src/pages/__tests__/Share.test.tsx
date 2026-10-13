@@ -74,6 +74,17 @@ describe("SharePage", () => {
     expect(await view.findByText("Buy groceries")).toBeInTheDocument();
   });
 
+  it("accepts a task with a valid deadline and categories", async () => {
+    const category = [{ id: "c1", name: "Work", emoji: "1f4bc", color: "#248eff" }];
+    renderShare(
+      shareRoute(compress({ ...sharedTask, deadline: "2025-02-03T12:00:00.000Z", category })),
+    );
+
+    const view = within(await dialog());
+    expect(await view.findByText("Buy groceries")).toBeInTheDocument();
+    expect(view.getByRole("button", { name: /add task/i })).toBeInTheDocument();
+  });
+
   it("adds the shared task to the user's list and returns home", async () => {
     const { user } = renderShare(shareRoute(compress(sharedTask)));
 
@@ -167,6 +178,44 @@ describe("SharePage", () => {
       renderShare(shareRoute(compress({ ...sharedTask, category })));
 
       await expectError("Invalid task or category color format.");
+    });
+
+    const withoutField = (field: string) =>
+      Object.fromEntries(Object.entries(sharedTask).filter(([key]) => key !== field));
+
+    it.each(["name", "done", "pinned", "color", "date"])(
+      "rejects a task without the required %s field",
+      async (field) => {
+        renderShare(shareRoute(compress(withoutField(field))));
+
+        await expectError("Invalid task data.");
+      },
+    );
+
+    it.each([
+      ["name", 42],
+      ["done", "yes"],
+      ["pinned", 1],
+      ["date", "not a date"],
+      ["description", 5],
+      ["emoji", false],
+      ["deadline", "not a date"],
+      ["category", "Work"],
+      ["category", [{ id: "c1", color: "#248eff" }]],
+    ])("rejects a task whose %s field has the wrong type (%j)", async (field, value) => {
+      renderShare(shareRoute(compress({ ...sharedTask, [field]: value })));
+
+      await expectError("Invalid task data.");
+    });
+
+    it.each([
+      ["an array", []],
+      ["a string", "task"],
+      ["null", null],
+    ])("rejects a payload that is %s instead of a task object", async (_, payload) => {
+      renderShare(shareRoute(compress(payload)));
+
+      await expectError("Invalid task data.");
     });
 
     it("rejects a sender name that is too long", async () => {
